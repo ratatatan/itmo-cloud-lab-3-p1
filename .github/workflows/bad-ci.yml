@@ -1,0 +1,29 @@
+name: Bad CI/CD
+
+on: [push]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Python and deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3 python3-pip
+          pip3 install -r requirements.txt pytest build
+
+      - name: Run tests
+        run: pytest
+
+      - name: Build package
+        run: python3 -m build
+
+      - name: Deploy to production
+        run: |
+          export SSH_KEY="-----BEGIN PRIVATE KEY-----I_AM_A_FAKE_KEY-----END PRIVATE KEY-----"
+          echo "$SSH_KEY" > key.pem
+          chmod 600 key.pem
+          scp -i key.pem -o StrictHostKeyChecking=no dist/*.whl user@example.com:/var/www/weather-cli/
