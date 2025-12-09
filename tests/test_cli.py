@@ -5,7 +5,7 @@ from pathlib import Path
 
 def test_cli_runs_and_prints_output():
     project_root = Path(__file__).resolve().parents[1]
-    cli_path = project_root / "src" / "weather_cli" / "cli.py"
+    cli_path = project_root / "cli.py"
 
     result = subprocess.run(
         [sys.executable, str(cli_path), "Moscow", "--temp", "15"],
